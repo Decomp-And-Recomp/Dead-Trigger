@@ -1,9 +1,10 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuLoader : MonoBehaviour
 {
 	private void Start()
 	{
-		Application.LoadLevel(Game.MainMenuLevelName);
+		SceneManager.LoadScene(Game.MainMenuLevelName);
 	}
 }

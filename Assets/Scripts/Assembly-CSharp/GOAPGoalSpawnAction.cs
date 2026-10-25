@@ -61,7 +61,7 @@ internal class GOAPGoalSpawnAction : GOAPGoal
 	{
 		base.Owner.BlackBoard.Desires.LookAtTarget = true;
 		base.Owner.WorldState.SetWSProperty(E_PropKey.DoSpawnAction, false);
-		base.Owner.NavMeshAgent.walkableMask &= ~(1 << LayerMask.NameToLayer("WalkOnlyWhenSpawn"));
+		base.Owner.NavMeshAgent.areaMask &= ~(1 << LayerMask.NameToLayer("WalkOnlyWhenSpawn"));
 		base.Owner.WeaponComponent.GetCurrentWeapon().SetBusy(0.4f);
 		base.Deactivate();
 	}

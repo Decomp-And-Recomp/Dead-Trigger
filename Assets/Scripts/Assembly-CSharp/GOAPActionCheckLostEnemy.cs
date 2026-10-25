@@ -43,7 +43,7 @@ internal class GOAPActionCheckLostEnemy : GOAPAction
 		{
 			return false;
 		}
-		if (!UnityEngine.AI.NavMesh.CalculatePath(Owner.Position, CheckingFact.Position, Owner.NavMeshAgent.walkableMask, Path))
+		if (!UnityEngine.AI.NavMesh.CalculatePath(Owner.Position, CheckingFact.Position, Owner.NavMeshAgent.areaMask, Path))
 		{
 			return false;
 		}

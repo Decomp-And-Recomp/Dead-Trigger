@@ -1282,7 +1282,7 @@ public class AgentHuman : Agent
 	{
 		if ((bool)NavMeshAgent)
 		{
-			NavMeshAgent.Stop();
+			NavMeshAgent.isStopped = true;
 			NavMeshAgent.ResetPath();
 			NavMeshAgent.enabled = false;
 		}

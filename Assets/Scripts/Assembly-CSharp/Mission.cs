@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(AudioSource))]
 public class Mission : MonoBehaviour
@@ -132,7 +133,7 @@ public class Mission : MonoBehaviour
 		AudioListener.pause = true;
 		AudioListener.volume = 0f;
 		Game.Instance.GameState = E_GameState.Game;
-		Game.Instance.CurrentLevel = Application.loadedLevelName;
+		Game.Instance.CurrentLevel = SceneManager.GetActiveScene().name;
 		ExplosionCache.Init();
 		Game.Instance.LeaderBoardID = LeaderBoardID;
 		LoadGui();
@@ -312,7 +313,7 @@ public class Mission : MonoBehaviour
 				text = "Gui_4_3";
 			}
 		}
-		Application.LoadLevelAdditive(text);
+		SceneManager.LoadSceneAsync(text, LoadSceneMode.Additive);
 	}
 
 	private void StartGui()

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour
 {
@@ -251,7 +252,7 @@ public class Game : MonoBehaviour
 	{
 		get
 		{
-			List<string> list = ((!(Application.loadedLevelName == MainMenuLevelName)) ? loadingScreens.ForCity : loadingScreens.ForMission);
+			List<string> list = ((!(SceneManager.GetActiveScene().name == MainMenuLevelName)) ? loadingScreens.ForCity : loadingScreens.ForMission);
 			return (list == null || list.Count <= 0) ? "empty" : list[UnityEngine.Random.Range(0, list.Count - 1)];
 		}
 	}
@@ -300,7 +301,7 @@ public class Game : MonoBehaviour
 		Screen.autorotateToLandscapeRight = true;
 		if (StandaloneMission)
 		{
-			CurrentLevel = Application.loadedLevelName;
+			CurrentLevel = SceneManager.GetActiveScene().name;
 		}
 		DateTime now = DateTime.Now;
 		if (now.Month >= 10 && now.Month <= 11 && ((now.Day > 24 && now.Month == 10) || (now.Day < 18 && now.Month == 11)))
@@ -413,7 +414,7 @@ public class Game : MonoBehaviour
 	public void Save_Save()
 	{
 		PlayerPrefs.SetInt(string.Concat(GameType, "SaveExist"), 1);
-		PlayerPrefs.SetString(string.Concat(GameType, "Level"), Application.loadedLevelName);
+		PlayerPrefs.SetString(string.Concat(GameType, "Level"), SceneManager.GetActiveScene().name);
 		PlayerPrefs.SetInt(string.Concat(GameType, "GameZone"), Mission.Instance ? Mission.Instance.GameZoneIndex : 0);
 	}
 
@@ -500,7 +501,7 @@ public class Game : MonoBehaviour
 		yield return new WaitForEndOfFrame();
 		yield return new WaitForEndOfFrame();
 		ClearInstances();
-		Application.LoadLevel(LoadingScreen);
+		SceneManager.LoadScene(LoadingScreen);
 		yield return new WaitForSeconds(0.6f);
 		ClearInstances();
 		GC.Collect(100);
@@ -509,7 +510,7 @@ public class Game : MonoBehaviour
 		yield return Resources.UnloadUnusedAssets();
 		yield return new WaitForEndOfFrame();
 		yield return new WaitForEndOfFrame();
-		Application.LoadLevel(scene);
+        SceneManager.LoadScene(scene);
 		GC.Collect(100);
 		yield return new WaitForEndOfFrame();
 		yield return new WaitForEndOfFrame();
@@ -693,7 +694,7 @@ public class Game : MonoBehaviour
 				}
 			}
 		}
-		if ((Application.loadedLevelName == MainMenuLevelName || GameState == E_GameState.IngameMenu) && IsMogaConnected && GuiMogaPopup.Instance != null)
+		if ((SceneManager.GetActiveScene().name == MainMenuLevelName || GameState == E_GameState.IngameMenu) && IsMogaConnected && GuiMogaPopup.Instance != null)
 		{
 			if (GuiMogaPopup.Instance.IsHelpOn() && MenuMogaKeyPressed())
 			{

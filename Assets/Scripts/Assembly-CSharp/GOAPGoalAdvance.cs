@@ -45,7 +45,7 @@ internal class GOAPGoalAdvance : GOAPGoal
 			}
 		}
 		Debug.LogError("GOAPGoalAdvance.CalculateGoalRelevancy() : TODO :: Unity 3.5 Conversion, NavMesh.CalculatePath(...).");
-		if (UnityEngine.AI.NavMesh.CalculatePath(base.Owner.Position, base.Owner.BlackBoard.VisibleTarget.Position, base.Owner.NavMeshAgent.walkableMask, Path) && Path.corners.Length >= 3)
+		if (UnityEngine.AI.NavMesh.CalculatePath(base.Owner.Position, base.Owner.BlackBoard.VisibleTarget.Position, base.Owner.NavMeshAgent.areaMask, Path) && Path.corners.Length >= 3)
 		{
 			AdvancePos = Mathfx.GetBestPositionFromPath(base.Owner.Position, Path.corners, Path.corners.Length, 3f, 8f);
 			base.GoalRelevancy = base.Owner.BlackBoard.GoapSetup.AdvanceRelevancy * num;

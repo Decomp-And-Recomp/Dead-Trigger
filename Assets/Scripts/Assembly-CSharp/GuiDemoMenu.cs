@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GuiDemoMenu : MonoBehaviour
 {
@@ -142,6 +143,6 @@ public class GuiDemoMenu : MonoBehaviour
 	private void LoadDemoLevel()
 	{
 		Debug.Log("Loading demo level " + m_Level);
-		Application.LoadLevel(m_Level);
+		SceneManager.LoadScene(m_Level);
 	}
 }

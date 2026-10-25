@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Loader : MonoBehaviour
 {
@@ -440,11 +441,11 @@ public class Loader : MonoBehaviour
 		{
 			yield return new WaitForEndOfFrame();
 			yield return new WaitForEndOfFrame();
-			Application.LoadLevel("empty");
+			SceneManager.LoadScene("empty");
 		}
 		yield return new WaitForEndOfFrame();
 		yield return new WaitForEndOfFrame();
-		Application.LoadLevel(scene);
+        SceneManager.LoadScene(scene);
 		yield return new WaitForEndOfFrame();
 		yield return new WaitForEndOfFrame();
 	}
