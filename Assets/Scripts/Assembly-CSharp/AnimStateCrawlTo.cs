@@ -19,7 +19,13 @@ public class AnimStateCrawlTo : AnimState
 	{
 		Owner.BlackBoard.Velocity = Vector3.zero;
 		base.OnActivate(action);
-		AnimName = null;
+
+        if (!IsFinished() && Owner.NavMeshAgent.enabled && Owner.NavMeshAgent.isOnNavMesh)
+        {
+            Owner.NavMeshAgent.isStopped = false;
+        }
+
+        AnimName = null;
 	}
 
 	public override void OnDeactivate()
