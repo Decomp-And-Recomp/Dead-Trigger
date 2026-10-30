@@ -62,6 +62,8 @@ public class AgentHuman : Agent
 
 	private HashSet<string> SoundLocks = new HashSet<string>();
 
+	private readonly Dictionary<Material, int> FPVRenderQueues = new Dictionary<Material, int>();
+
 	public Material FadeoutMaterial;
 
 	public Material DiffuseMaterial;
@@ -1723,18 +1725,39 @@ public class AgentHuman : Agent
 		}
 		Vector4 vector = Renderer.material.GetVector("_Params");
 		vector.y = (fpvOn ? 1 : 0);
-		Renderer.material.SetVector("_Params", vector);
+		SetFPVMaterial(Renderer.material, vector, fpvOn);
 		if (LodRenderers != null)
 		{
 			SkinnedMeshRenderer[] lodRenderers = LodRenderers;
 			foreach (Renderer renderer in lodRenderers)
 			{
-				renderer.material.SetVector("_Params", vector);
+				SetFPVMaterial(renderer.material, vector, fpvOn);
 			}
 		}
 		if (Mask != null)
 		{
-			Mask.GetComponent<Renderer>().material.SetVector("_Params", vector);
+			SetFPVMaterial(Mask.GetComponent<Renderer>().material, vector, fpvOn);
+		}
+	}
+
+	private void SetFPVMaterial(Material material, Vector4 parameters, bool fpvOn)
+	{
+		if (!material.HasProperty("_Params")) return;
+		material.SetVector("_Params", parameters);
+		if (fpvOn)
+		{
+			if (!FPVRenderQueues.ContainsKey(material))
+				FPVRenderQueues.Add(material, material.renderQueue);
+			material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Overlay;
+		}
+		else
+		{
+			int queue;
+			if (FPVRenderQueues.TryGetValue(material, out queue))
+			{
+				material.renderQueue = queue;
+				FPVRenderQueues.Remove(material);
+			}
 		}
 	}
 

@@ -14,6 +14,7 @@ Shader "MADFINGER/Characters/BRDFLit (Supports Backlight) - custom glossingess m
         _LightProbesLightingAmount ("Light probes lighting amount", Range(0,1)) = 0.9
         _SpecularStrength ("Specular strength weights", Vector) = (0,0,0,1)
         _Params ("x = open holes, y = FPV projection", Vector) = (0,0,0,0)
+        _FPVDepthScale ("FPV depth range", Range(0.001,1)) = 0.02
     }
     SubShader
     {
@@ -31,6 +32,7 @@ Shader "MADFINGER/Characters/BRDFLit (Supports Backlight) - custom glossingess m
             float _LightProbesLightingAmount;
             float4 _Params;
             float4 _ProjParams;
+            float _FPVDepthScale;
             sampler2D _MainTex;
             sampler2D _BumpMap;
             sampler2D _BRDFTex;
@@ -49,7 +51,7 @@ Shader "MADFINGER/Characters/BRDFLit (Supports Backlight) - custom glossingess m
                 float3 texcoord1 : TEXCOORD1;
                 float3 texcoord2 : TEXCOORD2;
                 float4 color : COLOR;
-                float4 vertex : POSITION;
+                float4 vertex : SV_POSITION;
             };
             v2f vert(appdata_t v)
             {
@@ -75,7 +77,7 @@ Shader "MADFINGER/Characters/BRDFLit (Supports Backlight) - custom glossingess m
                   float3 tmpvar_11;
                   tmpvar_11 = (UnityObjectToViewPos(v.vertex)).xyz;
                   float4 tmpvar_12;
-                  if ((_Params.y > 0.0)) {
+                  if (_Params.y > 0.0 && dot(abs(_ProjParams), float4(1,1,1,1)) > 0.0001) {
                   tmpvar_12 = _ProjParams;
                   } else {
                   tmpvar_12 = float4(1.0, 1.0, 1.0, 0.0);
@@ -96,7 +98,10 @@ Shader "MADFINGER/Characters/BRDFLit (Supports Backlight) - custom glossingess m
                   tmpvar_4.xyw = tmpvar_15.xyw;
                   tmpvar_4.z = (tmpvar_15.z * tmpvar_12.z);
                   tmpvar_4.z = (tmpvar_4.z + (tmpvar_12.w * tmpvar_15.w));
-                  tmpvar_4.z = max (tmpvar_4.z, 0.0);
+                  if (_Params.y > 0.0)
+                      tmpvar_4.z = lerp(UNITY_NEAR_CLIP_VALUE * tmpvar_15.w, tmpvar_4.z, _FPVDepthScale);
+                  else
+                      tmpvar_4.z = max(tmpvar_4.z, 0.0);
                   float3 tmpvar_16;
                   float3 tmpvar_17;
                   tmpvar_16 = tmpvar_1.xyz;
